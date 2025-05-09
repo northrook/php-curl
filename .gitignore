@@ -1,0 +1,20 @@
+### Editor
+/.ide/
+/.idea/
+*.code-workspace
+
+### Dev
+/vendor
+/node_modules
+/*.cache
+/*.lock
+/*.css
+/index.php
+package-lock.json
+
+### Symfony
+/config/secrets/prod/prod.decrypt.private.php
+/var
+/public/cache
+/public/build
+.env

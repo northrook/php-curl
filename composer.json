@@ -1,0 +1,39 @@
+{
+  "name": "northrook/php-curl",
+  "description": "PHP library for URL requests using cURL.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Martin Nielsen",
+      "email": "mn@northrook.com",
+      "role": "Developer"
+    },
+    {
+      "name": "php-curl-class: Zach Borboa",
+      "role": "Developer"
+    },
+    {
+      "name": "php-curl-class: Contributors",
+      "homepage": "https://github.com/php-curl-class/php-curl-class/graphs/contributors",
+      "role": "Contributors"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Support\\": "src"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=8.2",
+    "ext-curl": "*",
+    "ext-mbstring": "*",
+    "ext-zlib": "*"
+  },
+  "require-dev": {
+    "northrook/php-cs": "@dev",
+    "tracy/tracy": "^2.10"
+  }
+}
