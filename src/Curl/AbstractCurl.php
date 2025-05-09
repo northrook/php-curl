@@ -543,34 +543,42 @@ abstract class AbstractCurl
      * - `callable` the retry decider
      *
      * @param callable|int $retry
+     *
+     * @return self
      */
-    abstract public function setRetry( int|callable $retry ) : void;
+    abstract public function setRetry( int|callable $retry ) : self;
 
     /**
      * Set Timeout
      *
-     * @param null|int $seconds
+     * @param null|int  $seconds
+     *
+     * @return \Support\Curl\AbstractCurl
      */
-    public function setTimeout( ?int $seconds ) : void
+    public function setTimeout( ?int $seconds ) : self
     {
         $this->setOpt( CURLOPT_TIMEOUT, $seconds );
+
+        return $this;
     }
 
-    protected function setTimeoutInternal( int $seconds ) : void
+    final protected function setTimeoutInternal( int $seconds ) : void
     {
         $this->setOptInternal( CURLOPT_TIMEOUT, $seconds );
     }
 
-    abstract public function setUrl( string $url, mixed $data = '' );
+    abstract public function setUrl( string $url, mixed $data = '' ) : self;
 
     /**
      * Set User Agent
      *
-     * @param $user_agent
+     * @param ?string $userAgent
+     *
+     * @return AbstractCurl
      */
-    public function setUserAgent( $user_agent ) : void
+    final public function setUserAgent( ?string $userAgent = null ) : self
     {
-        $this->setOpt( CURLOPT_USERAGENT, $user_agent );
+        return $this->setOpt( CURLOPT_USERAGENT, $userAgent );
     }
 
     /**
@@ -578,7 +586,7 @@ abstract class AbstractCurl
      *
      * @return void
      */
-    protected function setUserAgentInternal( string $user_agent ) : void
+    final protected function setUserAgentInternal( string $user_agent ) : void
     {
         $this->setOptInternal( CURLOPT_USERAGENT, $user_agent );
     }

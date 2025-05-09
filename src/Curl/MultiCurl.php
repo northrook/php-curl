@@ -683,10 +683,14 @@ final class MultiCurl extends AbstractCurl
      * function returns a value which evaluates to false.
      *
      * @param callable|int $retry
+     *
+     * @return MultiCurl
      */
-    public function setRetry( int|callable $retry ) : void
+    public function setRetry( int|callable $retry ) : self
     {
         $this->retry = $retry;
+
+        return $this;
     }
 
     /**
@@ -694,8 +698,10 @@ final class MultiCurl extends AbstractCurl
      *
      * @param string $url
      * @param mixed  $data
+     *
+     * @return MultiCurl
      */
-    public function setUrl( string $url, mixed $data = '' ) : void
+    public function setUrl( string $url, mixed $data = '' ) : self
     {
         $built_url = Url::buildUrl( $url, $data );
 
@@ -706,7 +712,7 @@ final class MultiCurl extends AbstractCurl
             $this->baseUrl = (string) new Url( $this->baseUrl, $built_url );
         }
 
-        $this->setOpt( CURLOPT_URL, $this->baseUrl );
+        return $this->setOpt( CURLOPT_URL, $this->baseUrl );
     }
 
     /**

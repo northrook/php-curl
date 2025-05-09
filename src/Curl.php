@@ -388,16 +388,16 @@ final class Curl extends AbstractCurl
         $this->id = \hash( 'xxh64', $key );
 
         // Only set the default user agent if not already set.
-        if ( ! \array_key_exists( CURLOPT_USERAGENT, $this->options ) ) {
+        if ( ( $this->options[CURLOPT_USERAGENT] ?? null ) === null ) {
             $this->setDefaultUserAgentInternal();
         }
 
         // Only set the default timeout if not already set.
-        if ( ! \array_key_exists( CURLOPT_TIMEOUT, $this->options ) ) {
+        if ( ( $this->options[CURLOPT_TIMEOUT] ?? null ) === null ) {
             $this->setDefaultTimeoutInternal();
         }
 
-        if ( ! \array_key_exists( CURLINFO_HEADER_OUT, $this->options ) ) {
+        if ( ( $this->options[CURLINFO_HEADER_OUT] ?? null ) === null ) {
             $this->setDefaultHeaderOutInternal();
         }
 
@@ -575,10 +575,11 @@ final class Curl extends AbstractCurl
     }
 
     /**
-     * @param string $url
-     * @param int    $timeout
-     * @param bool   $throwOnError
-     * @param bool   $cached
+     * @param string                  $url
+     * @param int                     $timeout
+     * @param bool                    $throwOnError
+     * @param bool                    $cached
+     * @param array<array-key, mixed> $options
      *
      * @return bool
      * @throws CurlException
@@ -588,6 +589,7 @@ final class Curl extends AbstractCurl
         int    $timeout = 5,
         bool   $throwOnError = false,
         bool   $cached = true,
+        array  $options = [],
     ) : bool {
         if ( $cached && ( self::$probeCache[$url] ?? false ) ) {
             return true;
@@ -603,14 +605,13 @@ final class Curl extends AbstractCurl
             CURLOPT_RETURNTRANSFER : true,
         );
 
+        $curl->setOptions( ...$options );
+
         $curl->exec();
 
         if ( $curl->error ) {
             if ( $throwOnError ) {
-                throw new CurlException(
-                    $curl->httpStatusCode,
-                    $curl->errorMessage,
-                );
+                throw new CurlException( $curl );
             }
             self::$probeCache[$url] = false;
             return false;
@@ -1669,8 +1670,10 @@ final class Curl extends AbstractCurl
      * function returns a value which evaluates to false.
      *
      * @param callable|int $retry
+     *
+     * @return Curl
      */
-    public function setRetry( int|callable $retry ) : void
+    public function setRetry( int|callable $retry ) : self
     {
         if ( \is_callable( $retry ) ) {
             $this->retryDecider = $retry;
@@ -1679,6 +1682,8 @@ final class Curl extends AbstractCurl
             $maximum_number_of_retries = $retry;
             $this->remainingRetries    = $maximum_number_of_retries;
         }
+
+        return $this;
     }
 
     /**
@@ -1705,8 +1710,10 @@ final class Curl extends AbstractCurl
      *
      * @param string $url
      * @param mixed  $data
+     *
+     * @return Curl
      */
-    public function setUrl( string $url, mixed $data = '' ) : void
+    public function setUrl( string $url, mixed $data = '' ) : self
     {
         $built_url = Url::buildUrl( $url, $data );
 
@@ -1717,7 +1724,7 @@ final class Curl extends AbstractCurl
             $this->url = (string) new Url( $this->url, $built_url );
         }
 
-        $this->setOpt( CURLOPT_URL, $this->url );
+        return $this->setOpt( CURLOPT_URL, $this->url );
     }
 
     /**

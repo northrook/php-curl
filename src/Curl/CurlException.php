@@ -5,20 +5,27 @@ declare(strict_types=1);
 namespace Support\Curl;
 
 use Exception;
+use Support\Curl;
 use Throwable;
 
 final class CurlException extends Exception
 {
+    public readonly int $httpCode;
+
+    public readonly string $curlError;
+
     public function __construct(
-        public readonly int    $httpCode,
-        public readonly string $curlError,
-        ?string                $message = null,
-        ?Throwable             $previous = null,
+        public readonly Curl $curl,
+        ?string              $message = null,
+        ?Throwable           $previous = null,
     ) {
+        $this->httpCode  = $this->curl->httpStatusCode ?: 'E_RECOVERABLE_ERROR';
+        $this->curlError = $this->curl->errorMessage ?? 'No error message';
+
         if ( ! $message ) {
             $message = $this->getThrowCall();
             $message = $message ? ' ' : '';
-            $message .= "[{$httpCode}] ".$curlError;
+            $message .= "[{$this->httpCode}] ".$this->curlError;
         }
 
         parent::__construct( $message, E_RECOVERABLE_ERROR, $previous );
