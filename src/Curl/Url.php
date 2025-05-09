@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Support\cURL;
+namespace Support\Curl;
 
 use LogicException;
 use Stringable;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Support\cURL;
+namespace Support\Curl;
 
+use Support\Curl;
 use InvalidArgumentException;
-use Support\cURL;
 
 final class CurlOptionException extends InvalidArgumentException
 {
@@ -13,7 +13,7 @@ final class CurlOptionException extends InvalidArgumentException
         ?string    $message = null,
     ) {
         if ( \is_int( $option ) ) {
-            $option = cURL::getOptionsArray( true )[$option] ?? "Unknown[{$option}]";
+            $option = Curl::getOptionsArray( true )[$option] ?? "Unknown[{$option}]";
         }
 
         $message ??= "Unable to set cURL option '{$option}' with value '".\var_export( $value, true )."'.";

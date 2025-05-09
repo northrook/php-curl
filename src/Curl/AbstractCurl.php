@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Support\cURL;
+namespace Support\Curl;
 
 use InvalidArgumentException;
 use LengthException;
@@ -14,7 +14,7 @@ use const PHP_URL_HOST;
 /**
  * @internal
  */
-abstract class BaseCurl
+abstract class AbstractCurl
 {
     private static ?string $hasError = null;
 
@@ -207,7 +207,7 @@ abstract class BaseCurl
     }
 
     /**
-     * Set the `temp` directory used by {@see cURL}.
+     * Set the `temp` directory used by {@see Curl}.
      *
      * @param null|string $tempDirectory
      * @param bool        $allowTraversal
@@ -365,7 +365,7 @@ abstract class BaseCurl
      *
      * @param bool $follow_location
      *
-     * @see    cURL::setMaximumRedirects()
+     * @see    Curl::setMaximumRedirects()
      */
     public function setFollowLocation( bool $follow_location = true ) : void
     {
@@ -418,7 +418,7 @@ abstract class BaseCurl
      *
      * @param int $maximum_redirects
      *
-     * @see    cURL::setFollowLocation()
+     * @see    Curl::setFollowLocation()
      */
     public function setMaximumRedirects( int $maximum_redirects ) : void
     {

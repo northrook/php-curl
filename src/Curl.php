@@ -17,9 +17,17 @@ use stdClass;
 use BadMethodCallException;
 use LogicException;
 
-use Support\cURL\{BaseCurl, ArrayData, CurlException, CurlOptionException, Encoder, MultiCurl, Url};
+use Support\cURL\{
+    AbstractCurl,
+    ArrayData,
+    CurlException,
+    CurlOptionException,
+    Encoder,
+    MultiCurl,
+    Url
+};
 
-class cURL extends BaseCurl
+final class Curl extends AbstractCurl
 {
     public const DEFAULT_TIMEOUT = 30;
 
@@ -349,8 +357,8 @@ class cURL extends BaseCurl
         ?string $baseUrl = null,
         mixed   $options = [],
         ?string $tempDirectory = null,
-    ) : cURL {
-        return new cURL( $baseUrl, $options, $tempDirectory );
+    ) : Curl {
+        return new Curl( $baseUrl, $options, $tempDirectory );
     }
 
     /**
@@ -585,7 +593,7 @@ class cURL extends BaseCurl
             return true;
         }
 
-        $curl = new cURL( $url );
+        $curl = new Curl( $url );
 
         $curl->setOptions(
             CURLOPT_NOBODY         : true,
@@ -738,7 +746,7 @@ class cURL extends BaseCurl
         // Retrieve content length from the "Content-Length" header from the url
         // to download. Use an HTTP GET request without a body instead of a HEAD
         // request because not all hosts support HEAD requests.
-        $curl = new cURL();
+        $curl = new Curl();
         $curl->setOptInternal( CURLOPT_NOBODY, true );
 
         // Pass user-specified options to the instance checking for content-length.
@@ -788,7 +796,7 @@ class cURL extends BaseCurl
             $file_handle = \tmpfile();
 
             // Set up the instance downloading a part.
-            $curl = new cURL();
+            $curl = new Curl();
             $curl->setUrl( $url );
 
             // Pass user-specified options to the instance downloading a part.
@@ -1636,7 +1644,7 @@ class cURL extends BaseCurl
      *
      * @param $protocols
      *
-     * @see    cURL::setRedirectProtocols()
+     * @see    Curl::setRedirectProtocols()
      */
     public function setProtocols( $protocols ) : void
     {
@@ -1680,7 +1688,7 @@ class cURL extends BaseCurl
      *
      * @param $redirect_protocols
      *
-     * @see    cURL::setProtocols()
+     * @see    Curl::setProtocols()
      */
     public function setRedirectProtocols( $redirect_protocols ) : void
     {

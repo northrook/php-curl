@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Support\cURL;
+namespace Support\Curl;
 
-use Support\cURL;
 use CurlMultiHandle;
 use ErrorException;
+use Support\Curl;
 use UnexpectedValueException;
 
-class MultiCurl extends BaseCurl
+final class MultiCurl extends AbstractCurl
 {
     public ?string $baseUrl;
 
@@ -90,20 +90,20 @@ class MultiCurl extends BaseCurl
      * @param mixed           $query_parameters
      * @param mixed           $data
      *
-     * @return cURL
+     * @return Curl
      */
     public function addDelete(
         string|array $url,
         mixed        $query_parameters = [],
         mixed        $data = [],
-    ) : cURL {
+    ) : Curl {
         if ( \is_array( $url ) ) {
             $data             = $query_parameters;
             $query_parameters = $url;
             $url              = $this->baseUrl;
         }
 
-        $curl = new cURL( $this->baseUrl, $this->options );
+        $curl = new Curl( $this->baseUrl, $this->options );
         $this->queueHandle( $curl );
         $this->setUrl( $url, $query_parameters );
         $curl->setUrl( $url, $query_parameters );
@@ -118,11 +118,11 @@ class MultiCurl extends BaseCurl
      * @param $url
      * @param $mixed_filename
      *
-     * @return cURL
+     * @return Curl
      */
-    public function addDownload( $url, $mixed_filename ) : cURL
+    public function addDownload( $url, $mixed_filename ) : Curl
     {
-        $curl = new cURL( $this->baseUrl, $this->options );
+        $curl = new Curl( $this->baseUrl, $this->options );
         $this->queueHandle( $curl );
         $this->setUrl( $url );
         $curl->setUrl( $url );
@@ -183,18 +183,18 @@ class MultiCurl extends BaseCurl
      * @param string|string[] $url
      * @param mixed           $data
      *
-     * @return cURL
+     * @return Curl
      */
     public function addGet(
         string|array $url,
         mixed        $data = [],
-    ) : cURL {
+    ) : Curl {
         if ( \is_array( $url ) ) {
             $data = $url;
             $url  = $this->baseUrl;
         }
 
-        $curl = new cURL( $this->baseUrl, $this->options );
+        $curl = new Curl( $this->baseUrl, $this->options );
         $this->queueHandle( $curl );
         $this->setUrl( $url, $data );
         $curl->setUrl( $url, $data );
@@ -209,18 +209,18 @@ class MultiCurl extends BaseCurl
      * @param string|string[] $url
      * @param mixed           $data
      *
-     * @return cURL
+     * @return Curl
      */
     public function addHead(
         string|array $url,
         mixed        $data = [],
-    ) : cURL {
+    ) : Curl {
         if ( \is_array( $url ) ) {
             $data = $url;
             $url  = $this->baseUrl;
         }
 
-        $curl = new cURL( $this->baseUrl, $this->options );
+        $curl = new Curl( $this->baseUrl, $this->options );
         $this->queueHandle( $curl );
         $this->setUrl( $url, $data );
         $curl->setUrl( $url, $data );
@@ -235,18 +235,18 @@ class MultiCurl extends BaseCurl
      * @param string|string[] $url
      * @param mixed           $data
      *
-     * @return cURL
+     * @return Curl
      */
     public function addOptions(
         string|array $url,
         mixed        $data = [],
-    ) : cURL {
+    ) : Curl {
         if ( \is_array( $url ) ) {
             $data = $url;
             $url  = $this->baseUrl;
         }
 
-        $curl = new cURL( $this->baseUrl, $this->options );
+        $curl = new Curl( $this->baseUrl, $this->options );
         $this->queueHandle( $curl );
         $this->setUrl( $url, $data );
         $curl->setUrl( $url, $data );
@@ -261,18 +261,18 @@ class MultiCurl extends BaseCurl
      * @param string|string[] $url
      * @param mixed           $data
      *
-     * @return cURL
+     * @return Curl
      */
     public function addPatch(
         string|array $url,
         mixed        $data = [],
-    ) : cURL {
+    ) : Curl {
         if ( \is_array( $url ) ) {
             $data = $url;
             $url  = $this->baseUrl;
         }
 
-        $curl = new cURL( $this->baseUrl, $this->options );
+        $curl = new Curl( $this->baseUrl, $this->options );
 
         if ( \is_array( $data ) && empty( $data ) ) {
             $curl->removeHeader( 'Content-Length' );
@@ -296,20 +296,20 @@ class MultiCurl extends BaseCurl
      *                                              (default: false). Note: Redirections are only followed if the
      *                                              CURLOPT_FOLLOWLOCATION option is set to true.
      *
-     * @return cURL
+     * @return Curl
      */
     public function addPost(
         string|array $url,
         mixed        $data = '',
         bool         $follow_303_with_post = false,
-    ) : cURL {
+    ) : Curl {
         if ( \is_array( $url ) ) {
             $follow_303_with_post = (bool) $data;
             $data                 = $url;
             $url                  = $this->baseUrl;
         }
 
-        $curl = new cURL( $this->baseUrl, $this->options );
+        $curl = new Curl( $this->baseUrl, $this->options );
         $this->queueHandle( $curl );
         $this->setUrl( $url );
 
@@ -338,18 +338,18 @@ class MultiCurl extends BaseCurl
      * @param string|string[] $url
      * @param mixed           $data
      *
-     * @return cURL
+     * @return Curl
      */
     public function addPut(
         string|array $url,
         mixed        $data = [],
-    ) : cURL {
+    ) : Curl {
         if ( \is_array( $url ) ) {
             $data = $url;
             $url  = $this->baseUrl;
         }
 
-        $curl = new cURL( $this->baseUrl, $this->options );
+        $curl = new Curl( $this->baseUrl, $this->options );
         $this->queueHandle( $curl );
         $this->setUrl( $url );
         $curl->setUrl( $url );
@@ -368,18 +368,18 @@ class MultiCurl extends BaseCurl
      * @param string|string[] $url
      * @param mixed           $data
      *
-     * @return cURL
+     * @return Curl
      */
     public function addSearch(
         string|array $url,
         mixed        $data = [],
-    ) : cURL {
+    ) : Curl {
         if ( \is_array( $url ) ) {
             $data = $url;
             $url  = $this->baseUrl;
         }
 
-        $curl = new cURL( $this->baseUrl, $this->options );
+        $curl = new Curl( $this->baseUrl, $this->options );
         $this->queueHandle( $curl );
         $this->setUrl( $url );
         $curl->setUrl( $url );
@@ -397,11 +397,11 @@ class MultiCurl extends BaseCurl
      *
      * Add a Curl instance to the handle queue.
      *
-     * @param cURL $curl
+     * @param Curl $curl
      *
-     * @return cURL
+     * @return Curl
      */
-    public function addCurl( cURL $curl ) : cURL
+    public function addCurl( Curl $curl ) : Curl
     {
         $this->queueHandle( $curl );
         return $curl;
