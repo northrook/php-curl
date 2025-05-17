@@ -13,7 +13,7 @@ final class CurlOptionException extends InvalidArgumentException
         ?string    $message = null,
     ) {
         if ( \is_int( $option ) ) {
-            $option = Curl::getOptionsArray( true )[$option] ?? "Unknown[{$option}]";
+            $option = Curl::getOptionsArray()[$option] ?? "Unknown[{$option}]";
         }
 
         $message ??= "Unable to set cURL option '{$option}' with value '".\var_export( $value, true )."'.";

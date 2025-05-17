@@ -551,9 +551,9 @@ abstract class AbstractCurl
     /**
      * Set Timeout
      *
-     * @param null|int  $seconds
+     * @param null|int $seconds
      *
-     * @return \Support\Curl\AbstractCurl
+     * @return AbstractCurl
      */
     public function setTimeout( ?int $seconds ) : self
     {
