@@ -9,6 +9,7 @@ use LengthException;
 use LogicException;
 use RuntimeException;
 use Symfony\Component\Filesystem\Exception\{FileNotFoundException};
+use Support\Curl;
 use const PHP_URL_HOST;
 
 /**
@@ -578,6 +579,10 @@ abstract class AbstractCurl
      */
     final public function setUserAgent( ?string $userAgent = null ) : self
     {
+        if ( $userAgent === Curl::AGENT_SERVER ) {
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        }
+
         return $this->setOpt( CURLOPT_USERAGENT, $userAgent );
     }
 

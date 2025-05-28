@@ -31,6 +31,10 @@ final class Curl extends AbstractCurl
 {
     public const int DEFAULT_TIMEOUT = 30;
 
+    public const string AGENT_SERVER = 'HTTP_USER_AGENT';
+
+    public const string AGENT_GOOGLEBOT = 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Chrome/W.X.Y.Z Safari/537.36';
+
     /**
      * RFC 2616: any `CHAR` except `CTL` or separators.
      * - `CHAR`           = `<any US-ASCII character (octets 0 - 127)>`
