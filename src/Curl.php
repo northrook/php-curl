@@ -112,6 +112,8 @@ final class Curl extends AbstractCurl
 
     public bool $httpError = false;
 
+    public bool $httpExists = false;
+
     public int $httpStatusCode = 0;
 
     public ?string $httpErrorMessage;
@@ -214,6 +216,12 @@ final class Curl extends AbstractCurl
         ?string $tempDirectory = null,
     ) : Curl {
         return new Curl( $baseUrl, $options, $tempDirectory );
+    }
+
+    public function curl() : self
+    {
+        $this->exec();
+        return $this;
     }
 
     /**
@@ -798,8 +806,13 @@ final class Curl extends AbstractCurl
         $this->response        = $this->parseResponse( $this->responseHeaders, $this->rawResponse );
 
         $this->httpStatusCode = $this->getInfo( CURLINFO_HTTP_CODE );
-        $this->httpError      = \in_array( (int) \floor( $this->httpStatusCode / 100 ), [4, 5], true );
-        $this->error          = $this->curlError || $this->httpError;
+
+        $code = (int) ( $this->httpStatusCode / 100 );
+
+        $this->httpError  = $code === 4 || $code === 5;
+        $this->httpExists = $code === 2 || $code === 3 || $code === 4;
+
+        $this->error = $this->curlError || $this->httpError;
 
         $this->call( $this->afterSendCallback );
 
@@ -1332,19 +1345,12 @@ final class Curl extends AbstractCurl
 
     private function getDefaultUserAgent() : string
     {
-        // (+https://github.com/northrook/php-curl)
-
-        // $user_agent = 'php-curl/ ';
-        // $curl_version = \curl_version();
-        // $user_agent .= ' curl/'.$curl_version['version'];
-
         $info       = $this::getVersion();
         $version    = $info['version'];
         $user_agent = 'php-curl/'.\substr( $version, 0, \strrpos( $version, '-' ) );
         $user_agent .= ' (+https://github.com/northrook/php-curl)';
         $user_agent .= ' PHP/'.PHP_VERSION;
 
-        // dump( \get_defined_vars() );
         return $user_agent;
     }
 
@@ -1477,10 +1483,9 @@ final class Curl extends AbstractCurl
         }
 
         foreach ( $options as $option => $value ) {
-            if ( \is_string( $option ) ) {
-                $option = \constant( $option );
-                dump( $option );
-            }
+            $option = \is_string( $option )
+                    ? (int) \constant( $option )
+                    : $option;
 
             $this->setOpt( $option, $value );
         }
@@ -2063,7 +2068,6 @@ final class Curl extends AbstractCurl
 
     public function __isset( $name )
     {
-        dump( __METHOD__.' checks '.$name );
         if ( \in_array( $name, self::$deferredProperties, true ) ) {
             if ( isset( $this->deferredValues[$name] ) ) {
                 return true;
