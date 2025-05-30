@@ -908,20 +908,17 @@ final class Curl extends AbstractCurl
     /**
      * Get Info
      *
-     * @param mixed $opt
+     * @param ?int $CURLINFO_
      *
      * @return mixed
      */
-    public function getInfo( mixed $opt = null ) : mixed
+    public function getInfo( ?int $CURLINFO_ = null ) : mixed
     {
-        $args   = [];
-        $args[] = $this->curl;
-
-        if ( \func_num_args() ) {
-            $args[] = $opt;
+        if ( ! $this->curl instanceof CurlHandle ) {
+            return null;
         }
 
-        return \call_user_func_array( 'curl_getinfo', $args );
+        return \curl_getinfo( $this->curl, $CURLINFO_ );
     }
 
     /**
